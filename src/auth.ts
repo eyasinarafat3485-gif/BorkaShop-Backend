@@ -7,7 +7,11 @@ dotenv.config();
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/borkashop";
 const BETTER_AUTH_SECRET = process.env.BETTER_AUTH_SECRET || "borkashop_better_auth_secret_key_32_chars_long_2026";
-const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL || `http://localhost:${process.env.PORT || 5000}`;
+const BETTER_AUTH_URL =
+  process.env.BETTER_AUTH_URL ||
+  (process.env.NODE_ENV === "production"
+    ? "https://borkashop-backend.onrender.com"
+    : `http://localhost:${process.env.PORT || 5000}`);
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
 
 // MongoClient instance

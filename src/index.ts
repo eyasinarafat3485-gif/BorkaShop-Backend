@@ -12,11 +12,23 @@ const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
 
 // =========================================================================
-// 1. CORS Configuration
+// 1. CORS Configuration (Supports Local, Custom Domain, & Vercel Deployments)
 // =========================================================================
 app.use(
   cors({
-    origin: [CLIENT_URL, "http://localhost:3000", "http://127.0.0.1:3000"],
+    origin: (origin, callback) => {
+      // Allow server-to-server or requests without origin
+      if (!origin) return callback(null, true);
+      if (
+        origin === CLIENT_URL ||
+        origin === "http://localhost:3000" ||
+        origin === "http://127.0.0.1:3000" ||
+        origin.endsWith(".vercel.app")
+      ) {
+        return callback(null, true);
+      }
+      callback(null, true); // Allow all valid web clients
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
